@@ -2,6 +2,7 @@ package com.FluffyTerror.Joom2.service.product;
 
 import com.FluffyTerror.Joom2.model.Product;
 import com.FluffyTerror.Joom2.request.AddProductRequest;
+import com.FluffyTerror.Joom2.request.UpdateProductRequest;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface IProductService {
 
     void deleteProductById(Long id);
 
-    void updateProduct(Product product, Long productId);
+    Product updateProduct(UpdateProductRequest product, Long productId);
 
     List<Product> getAllProducts();
 
