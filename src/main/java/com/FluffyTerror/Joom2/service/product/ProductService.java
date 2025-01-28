@@ -1,18 +1,36 @@
 package com.FluffyTerror.Joom2.service.product;
 
 import com.FluffyTerror.Joom2.exceptions.ProductNotFoundException;
+import com.FluffyTerror.Joom2.model.Category;
 import com.FluffyTerror.Joom2.model.Product;
 import com.FluffyTerror.Joom2.repository.ProductRepository;
+import com.FluffyTerror.Joom2.request.AddProductRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class ProductService implements IProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+
 
     @Override
-    public Product addProduct(Product product) {
+    public Product addProduct(AddProductRequest request) {
         return null;
+    }
+
+    private Product createProduct(AddProductRequest request, Category category){
+        return new Product(
+                request.getName(),
+                request.getBrand(),
+                request.getPrice(),
+                request.getAmount(),
+                request.getDescription(),
+                category
+        );
     }
 
     @Override
@@ -43,7 +61,7 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getProductsByBrand(String brand) {
-        return productRepository.findByBrand();
+        return productRepository.findByBrand(brand);
     }
 
     @Override

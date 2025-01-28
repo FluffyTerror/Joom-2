@@ -1,11 +1,12 @@
 package com.FluffyTerror.Joom2.service.product;
 
 import com.FluffyTerror.Joom2.model.Product;
+import com.FluffyTerror.Joom2.request.AddProductRequest;
 
 import java.util.List;
 
 public interface IProductService {
-    Product addProduct(Product product);
+    Product addProduct(AddProductRequest request);
 
     Product getProductById(Long id);
 
