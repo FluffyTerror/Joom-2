@@ -19,14 +19,11 @@ public class Image {
     @Id//помечаем то что это первичный ключ
     @GeneratedValue(strategy = GenerationType.IDENTITY)//автоматическая генерация столбца id в бд
     private Long id;
-
     private String fileName;
-
     private String fileType;
 
     @Lob
     private Blob image;
-
     private String downloadURL;
 
     @ManyToOne //у одного продукта множество фото
