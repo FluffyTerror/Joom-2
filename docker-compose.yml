@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: joom-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: Joom-2DB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: gigapass1488
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  joom-api:
+    build: .
+    container_name: joom-api
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/Joom-2DB
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: gigapass1488
+
+volumes:
+  postgres_data:
