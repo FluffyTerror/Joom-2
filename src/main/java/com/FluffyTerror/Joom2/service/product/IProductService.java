@@ -1,5 +1,6 @@
 package com.FluffyTerror.Joom2.service.product;
 
+import com.FluffyTerror.Joom2.dto.ProductDto;
 import com.FluffyTerror.Joom2.model.Product;
 import com.FluffyTerror.Joom2.request.AddProductRequest;
 import com.FluffyTerror.Joom2.request.UpdateProductRequest;
@@ -29,4 +30,7 @@ public interface IProductService {
 
     Long countProductsByBrandAndName(String brand,String name);
 
+    List<ProductDto> getConvertedProducts(List<Product> products);
+
+    ProductDto convertToDto(Product product);
 }

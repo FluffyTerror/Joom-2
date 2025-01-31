@@ -1,5 +1,6 @@
 package com.FluffyTerror.Joom2.controller;
 
+import com.FluffyTerror.Joom2.dto.ProductDto;
 import com.FluffyTerror.Joom2.exceptions.ResourceNotFoundException;
 import com.FluffyTerror.Joom2.model.Product;
 import com.FluffyTerror.Joom2.request.AddProductRequest;
@@ -24,7 +25,8 @@ public class ProductController {
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllProducts() {
         List<Product> products = productService.getAllProducts();
-        return ResponseEntity.ok(new ApiResponse("Found!", products));
+        List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+        return ResponseEntity.ok(new ApiResponse("Found!", convertedProducts));
     }
 
     //важный нюанс с @PathVariable - если мы передаем в запросе и в эндпоинт одинаковое имя то проблем не возникнет либо можно указывать
@@ -33,7 +35,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
         try {
             Product product = productService.getProductById(productId);
-            return ResponseEntity.ok(new ApiResponse("Found the product: " + product.getId(), product));
+            ProductDto productDto = productService.convertToDto(product);
+            return ResponseEntity.ok(new ApiResponse("Found the product: " + product.getId(), productDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -43,7 +46,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
         try {
             Product product1 = productService.addProduct(product);
-            return ResponseEntity.ok(new ApiResponse("Created the product: " + product1.getId(), product1));
+            ProductDto productDto = productService.convertToDto(product1);
+            return ResponseEntity.ok(new ApiResponse("Created the product: " + product1.getId(), productDto));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -53,7 +57,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long id, @RequestBody UpdateProductRequest product) {
         try {
             Product updatedProduct = productService.updateProduct(product, id);
-            return ResponseEntity.ok(new ApiResponse("Updated the product: " + updatedProduct.getId(), updatedProduct));
+            ProductDto productDto = productService.convertToDto(updatedProduct);
+            return ResponseEntity.ok(new ApiResponse("Updated the product: " + updatedProduct.getId(), productDto));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -76,7 +81,8 @@ public class ProductController {
             if (products.isEmpty()) {
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No Products found", null));
             }
-            return ResponseEntity.ok(new ApiResponse("Found the products: ", products));
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return ResponseEntity.ok(new ApiResponse("Found the products: ", convertedProducts));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -90,7 +96,8 @@ public class ProductController {
             if (products.isEmpty()) {
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No Products found", null));
             }
-            return ResponseEntity.ok(new ApiResponse("Found the products: ", products));
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return ResponseEntity.ok(new ApiResponse("Found the products: ", convertedProducts));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -103,7 +110,8 @@ public class ProductController {
             if (products.isEmpty()) {
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No Products found", null));
             }
-            return ResponseEntity.ok(new ApiResponse("Found the products: ", products));
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return ResponseEntity.ok(new ApiResponse("Found the products: ", convertedProducts));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -117,7 +125,8 @@ public class ProductController {
             if (products.isEmpty()) {
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No Products found", null));
             }
-            return ResponseEntity.ok(new ApiResponse("Found the products: ", products));
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return ResponseEntity.ok(new ApiResponse("Found the products: ", convertedProducts));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -130,7 +139,8 @@ public class ProductController {
             if (products.isEmpty()) {
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No Products found", null));
             }
-            return ResponseEntity.ok(new ApiResponse("Found the products: ", products));
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+            return ResponseEntity.ok(new ApiResponse("Found the products: ", convertedProducts));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
