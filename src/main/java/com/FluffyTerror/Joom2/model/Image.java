@@ -24,7 +24,7 @@ public class Image {
 
     @Lob
     private Blob image;
-    private String downloadURL;
+    private String downloadUrl;
 
     @ManyToOne //у одного продукта множество фото
     @JoinColumn(name = "product_id")//при объединении колонок мы задаем имя новой колонке с результатом объединения
