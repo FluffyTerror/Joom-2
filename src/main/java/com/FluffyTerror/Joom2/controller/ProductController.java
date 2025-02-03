@@ -31,8 +31,8 @@ public class ProductController {
 
     //важный нюанс с @PathVariable - если мы передаем в запросе и в эндпоинт одинаковое имя то проблем не возникнет либо можно указывать
     //@PathVariable("идентичное имя переменной из эндпоинта")
-    @GetMapping("/product/{productId}/product")
-    public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
+    @GetMapping("/product/{productId}/product")//вот тут productId
+    public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {//и вот тут тоже productId
         try {
             Product product = productService.getProductById(productId);
             ProductDto productDto = productService.convertToDto(product);
@@ -74,6 +74,7 @@ public class ProductController {
         }
 
     }
+
     @PostMapping("products/by/brand-and-name")
     public ResponseEntity<ApiResponse> getProductByBrandAndName(@RequestParam String brand, @RequestParam String name) {
         try {
@@ -103,6 +104,7 @@ public class ProductController {
         }
 
     }
+
     @GetMapping("products/{name}/products")
     public ResponseEntity<ApiResponse> getProductByName(@PathVariable String name){
         try {
@@ -155,10 +157,5 @@ public class ProductController {
             return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
-
-
-
-
-
 
 }
