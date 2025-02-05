@@ -1,5 +1,6 @@
 package com.FluffyTerror.Joom2.controller;
 
+import com.FluffyTerror.Joom2.dto.CartDto;
 import com.FluffyTerror.Joom2.exceptions.ResourceNotFoundException;
 import com.FluffyTerror.Joom2.model.Cart;
 import com.FluffyTerror.Joom2.response.ApiResponse;
@@ -25,7 +26,8 @@ public class CartController {
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) {
         try {
             Cart cart = cartService.getCart(cartId);
-            return ResponseEntity.ok(new ApiResponse("Found!", cart));
+            CartDto cartDto = CartDto.toDto(cart);
+            return ResponseEntity.ok(new ApiResponse("Found!", cartDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -46,7 +48,7 @@ public class CartController {
         try {
             BigDecimal totalPrice = cartService.getTotalPrice(cartId);
             Cart cart = cartService.getCart(cartId);
-            return ResponseEntity.ok(new ApiResponse("Total price for the cart " + cart.getId(), null));
+            return ResponseEntity.ok(new ApiResponse("Total price for the cart " + cart.getId(), totalPrice));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
