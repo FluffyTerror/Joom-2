@@ -6,19 +6,20 @@ import com.FluffyTerror.Joom2.model.CartItem;
 import com.FluffyTerror.Joom2.model.Product;
 import com.FluffyTerror.Joom2.repository.CartItemRepository;
 import com.FluffyTerror.Joom2.repository.CartRepository;
+import com.FluffyTerror.Joom2.service.product.IProductService;
 import com.FluffyTerror.Joom2.service.product.ProductService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-
 @Service
-@AllArgsConstructor
-public class CartItemService implements ICartItemService {
+@RequiredArgsConstructor
+public class CartItemService  implements ICartItemService {
     private final CartItemRepository cartItemRepository;
-    private final ProductService productService;
-    private final ICartService cartService;
     private final CartRepository cartRepository;
+    private final IProductService productService;
+    private final ICartService cartService;
 
     @Override
     public void addItemToCart(Long cartId, Long productId, int quantity) {
@@ -31,15 +32,13 @@ public class CartItemService implements ICartItemService {
         Product product = productService.getProductById(productId);
         CartItem cartItem = cart.getItems()
                 .stream()
-                .filter(item -> item.getProduct()
-                        .getId().equals(productId))
+                .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst().orElse(new CartItem());
         if (cartItem.getId() == null) {
+            cartItem.setCart(cart);
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
-            cartItem.setCart(cart);
             cartItem.setUnitPrice(product.getPrice());
-
         } else {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         }
@@ -47,7 +46,6 @@ public class CartItemService implements ICartItemService {
         cart.addItem(cartItem);
         cartItemRepository.save(cartItem);
         cartRepository.save(cart);
-
     }
 
     @Override
@@ -56,16 +54,6 @@ public class CartItemService implements ICartItemService {
         CartItem itemToRemove = getCartItem(cartId, productId);
         cart.removeItem(itemToRemove);
         cartRepository.save(cart);
-
-    }
-
-    @Override
-    public CartItem getCartItem(Long cartId, Long productId) {
-        Cart cart = cartService.getCart(cartId);
-        return cart.getItems()
-                .stream()
-                .filter(item -> item.getProduct().getId().equals(productId))
-                .findFirst().orElseThrow(() -> new ResourceNotFoundException("Item not found"));
     }
 
     @Override
@@ -86,5 +74,14 @@ public class CartItemService implements ICartItemService {
 
         cart.setTotalAmount(totalAmount);
         cartRepository.save(cart);
+    }
+
+    @Override
+    public CartItem getCartItem(Long cartId, Long productId) {
+        Cart cart = cartService.getCart(cartId);
+        return cart.getItems()
+                .stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst().orElseThrow(() -> new ResourceNotFoundException("Item not found"));
     }
 }

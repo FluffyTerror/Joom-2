@@ -18,16 +18,15 @@ public class CartItemController {
     private final ICartService cartService;
 
     @PostMapping("/item/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long cartId,
+    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId,
                                                      @RequestParam Long productId,
                                                      @RequestParam Integer quantity) {
         try {
             if (cartId == null) {
-                cartId = cartService.initializeNewCart();//если у юзера нет корзины - то мы сделаем ее за него при запросе
+                cartId= cartService.initializeNewCart();
             }
-
             cartItemService.addItemToCart(cartId, productId, quantity);
-            return ResponseEntity.ok(new ApiResponse("Added to cart successfully", null));
+            return ResponseEntity.ok(new ApiResponse("Add Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -37,7 +36,7 @@ public class CartItemController {
     public ResponseEntity<ApiResponse> removeItemFromCart(@PathVariable Long cartId, @PathVariable Long productId) {
         try {
             cartItemService.removeItemFromCart(cartId, productId);
-            return ResponseEntity.ok(new ApiResponse("Removed from cart successfully", null));
+            return ResponseEntity.ok(new ApiResponse("Removed " + productId + " from cart successfully", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
