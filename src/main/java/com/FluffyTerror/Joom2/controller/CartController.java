@@ -26,7 +26,7 @@ public class CartController {
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) {
         try {
             Cart cart = cartService.getCart(cartId);
-            CartDto cartDto = CartDto.toDto(cart);
+            CartDto cartDto = CartDto.toDto(cart);//преобразую в dto, чтобы избежать ошибки 500 при вызове корзины с товаром у которого есть фото
             return ResponseEntity.ok(new ApiResponse("Found!", cartDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

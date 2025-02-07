@@ -9,6 +9,8 @@ public class ImageDto {
     private Long id;
     private String fileName;
     private String downloadUrl;
+
+    //очередной костыль для работы корзины который берет изображение, но не возвращает blob, а только ссылку на скачивание
     public static ImageDto toDto(Image image) {
         ImageDto dto = new ImageDto();
         dto.setId(image.getId());

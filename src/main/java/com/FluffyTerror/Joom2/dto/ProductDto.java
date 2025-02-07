@@ -33,6 +33,7 @@ public class ProductDto {
      * @param product объект Product из базы данных
      * @return заполненный ProductDto
      */
+    //по факту все эти dto - костыль для корректной работы корзины
     public static ProductDto toDto(Product product) {
         ProductDto dto = new ProductDto();
         dto.setId(product.getId());

@@ -22,14 +22,13 @@ public class CartItemDto {
      * @param item объект CartItem из базы данных
      * @return заполненный CartItemDto
      */
+
     public static CartItemDto toDto(CartItem item) {
         CartItemDto dto = new CartItemDto();
-        // Предполагаем, что в вашей сущности CartItem идентификатор называется getId()
         dto.setItemId(item.getId());
         dto.setQuantity(item.getQuantity());
-        // Предполагаем, что цена за единицу хранится в поле unitPrice
         dto.setUnitPrice(item.getUnitPrice());
-        // Преобразуем продукт в DTO через вызов статического метода в ProductDto
+        // Преобразую продукт в DTO через вызов статического метода в ProductDto
         dto.setProduct(ProductDto.toDto(item.getProduct()));
         return dto;
     }

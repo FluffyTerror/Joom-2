@@ -12,6 +12,7 @@ public class CartDto {
     private Long cartId;
     private Set<CartItemDto> items;
     private BigDecimal totalAmount;
+
     /**
      * Преобразует сущность Cart в CartDto.
      *
@@ -20,7 +21,7 @@ public class CartDto {
      */
     public static CartDto toDto(Cart cart) {
         CartDto dto = new CartDto();
-        dto.setCartId(cart.getId()); // Используем setCartId, а не setId
+        dto.setCartId(cart.getId());
         dto.setTotalAmount(cart.getTotalAmount());
         dto.setItems(cart.getItems().stream()
                 .map(CartItemDto::toDto)
