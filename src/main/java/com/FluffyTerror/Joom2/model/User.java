@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NaturalId;
 
 import java.util.List;
 
@@ -14,19 +15,18 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class User {
-    @Id//помечаем то что это первичный ключ
-    @GeneratedValue(strategy = GenerationType.IDENTITY)//автоматическая генерация столбца id в бд
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String firstName;
     private String lastName;
+    @NaturalId
     private String email;
     private String password;
 
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
 }

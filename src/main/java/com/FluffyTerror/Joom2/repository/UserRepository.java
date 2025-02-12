@@ -1,0 +1,8 @@
+package com.FluffyTerror.Joom2.repository;
+
+import com.FluffyTerror.Joom2.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    boolean existsByEmail(String email);
+}

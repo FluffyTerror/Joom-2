@@ -10,16 +10,15 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class OrderItem {
-    @Id//помечаем то что это первичный ключ
-    @GeneratedValue(strategy = GenerationType.IDENTITY)//автоматическая генерация столбца id в бд
-    private Long orderId;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private int quantity;
     private BigDecimal price;
+
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
