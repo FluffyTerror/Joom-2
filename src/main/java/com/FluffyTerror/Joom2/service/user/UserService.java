@@ -1,5 +1,6 @@
 package com.FluffyTerror.Joom2.service.user;
 
+import com.FluffyTerror.Joom2.dto.UserDto;
 import com.FluffyTerror.Joom2.exceptions.AlreadyExistsException;
 import com.FluffyTerror.Joom2.exceptions.ResourceNotFoundException;
 import com.FluffyTerror.Joom2.model.User;
@@ -7,6 +8,7 @@ import com.FluffyTerror.Joom2.repository.UserRepository;
 import com.FluffyTerror.Joom2.request.CreateUserRequest;
 import com.FluffyTerror.Joom2.request.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements IUserService {
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public User getUserById(Long userId) {
@@ -52,5 +55,9 @@ public class UserService implements IUserService {
                     throw new ResourceNotFoundException("User with " + userId + " does not exist");
                 });
 
+    }
+    @Override
+    public UserDto convertToDto(User user){
+        return modelMapper.map(user, UserDto.class);
     }
 }
