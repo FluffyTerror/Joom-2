@@ -2,6 +2,7 @@ package com.FluffyTerror.Joom2.service.cart;
 
 import com.FluffyTerror.Joom2.exceptions.ResourceNotFoundException;
 import com.FluffyTerror.Joom2.model.Cart;
+import com.FluffyTerror.Joom2.model.User;
 import com.FluffyTerror.Joom2.repository.CartItemRepository;
 import com.FluffyTerror.Joom2.repository.CartRepository;
 import jakarta.transaction.Transactional;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
@@ -45,10 +47,13 @@ public class CartService implements ICartService{
     }
 
     @Override
-    public Long initializeNewCart() {
-        Cart newCart = new Cart();
-        // Не задаем id вручную – он будет сгенерирован автоматически
-        return cartRepository.save(newCart).getId();
+    public Cart initializeNewCart(User user) {
+        return Optional.ofNullable(getCartByUserId(user.getId()))
+                .orElseGet(() -> {
+                    Cart cart = new Cart();
+                    cart.setUser(user);
+                    return cartRepository.save(cart);
+                });
     }
 
     @Override

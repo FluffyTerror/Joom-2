@@ -2,6 +2,7 @@ package com.FluffyTerror.Joom2.service.product;
 
 import com.FluffyTerror.Joom2.dto.ImageDto;
 import com.FluffyTerror.Joom2.dto.ProductDto;
+import com.FluffyTerror.Joom2.exceptions.AlreadyExistsException;
 import com.FluffyTerror.Joom2.exceptions.ProductNotFoundException;
 import com.FluffyTerror.Joom2.model.Category;
 import com.FluffyTerror.Joom2.model.Image;
@@ -34,6 +35,10 @@ public class ProductService implements IProductService {
         // если категория есть то ставим эту категорию новому продукту
         //если нет то сохраняем как новую категорию
         //и ставим ее для нашего продукта
+
+        if (productExists(request.getName(),request.getBrand())){
+                throw new AlreadyExistsException(request.getBrand()+" "+request.getName()+ " "+"already exists, you may update this product instead!");
+        }
         Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(()->{
                     Category newCategory = new Category(request.getCategory().getName());
@@ -42,6 +47,10 @@ public class ProductService implements IProductService {
                 });
         request.setCategory(category);
         return productRepository.save(createProduct(request,category));
+    }
+
+    private boolean productExists(String name,String brand){
+        return productRepository.existsByNameAndBrand(name,brand);
     }
 
     private Product createProduct(AddProductRequest request, Category category){

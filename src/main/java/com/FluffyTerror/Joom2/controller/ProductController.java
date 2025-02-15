@@ -1,6 +1,7 @@
 package com.FluffyTerror.Joom2.controller;
 
 import com.FluffyTerror.Joom2.dto.ProductDto;
+import com.FluffyTerror.Joom2.exceptions.AlreadyExistsException;
 import com.FluffyTerror.Joom2.exceptions.ResourceNotFoundException;
 import com.FluffyTerror.Joom2.model.Product;
 import com.FluffyTerror.Joom2.request.AddProductRequest;
@@ -13,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -48,8 +48,8 @@ public class ProductController {
             Product product1 = productService.addProduct(product);
             ProductDto productDto = productService.convertToDto(product1);
             return ResponseEntity.ok(new ApiResponse("Created the product: " + product1.getId(), productDto));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

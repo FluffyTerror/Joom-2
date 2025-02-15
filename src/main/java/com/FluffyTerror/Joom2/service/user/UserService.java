@@ -22,7 +22,7 @@ public class UserService implements IUserService {
     @Override
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User with " + userId + " does not exist"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " does not exist"));
     }
 
     @Override
@@ -45,14 +45,14 @@ public class UserService implements IUserService {
             existingUser.setFirstName(request.getFirstName());
             existingUser.setLastName(request.getLastName());
             return userRepository.save(existingUser);
-        }).orElseThrow(() -> new ResourceNotFoundException("User with " + userId + " does not exist , unable to update"));
+        }).orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " does not exist , unable to update"));
     }
 
     @Override
     public void deleteUser(Long userId) {
         userRepository.findById(userId).ifPresentOrElse(userRepository::delete,
                 () -> {
-                    throw new ResourceNotFoundException("User with " + userId + " does not exist");
+                    throw new ResourceNotFoundException("User with id " + userId + " does not exist");
                 });
 
     }

@@ -1,9 +1,7 @@
 package com.FluffyTerror.Joom2.controller;
 
-import com.FluffyTerror.Joom2.dto.ProductDto;
 import com.FluffyTerror.Joom2.dto.UserDto;
 import com.FluffyTerror.Joom2.exceptions.ResourceNotFoundException;
-import com.FluffyTerror.Joom2.model.Product;
 import com.FluffyTerror.Joom2.model.User;
 import com.FluffyTerror.Joom2.repository.UserRepository;
 import com.FluffyTerror.Joom2.request.CreateUserRequest;
@@ -29,7 +27,7 @@ public class UserController {
         try {
             User user = userService.getUserById(userId);
             UserDto userDto = userService.convertToDto(user);
-            return ResponseEntity.ok(new ApiResponse("Found the user : " + user.getId(), userDto));
+            return ResponseEntity.ok(new ApiResponse("Found the user with id " + user.getId(), userDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -40,7 +38,7 @@ public class UserController {
         try {
             User user = userService.createUser(request);
             UserDto userDto = userService.convertToDto(user);
-            return ResponseEntity.ok(new ApiResponse("User with " + user.getId()+" created successfully! ", userDto));
+            return ResponseEntity.ok(new ApiResponse("User with id " + user.getId() + " created successfully! ", userDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
@@ -51,7 +49,7 @@ public class UserController {
         try {
             User user = userService.updateUser(request,userId);
             UserDto userDto = userService.convertToDto(user);
-            return ResponseEntity.ok(new ApiResponse("User with " + user.getId()+" updated successfully! ", userDto));
+            return ResponseEntity.ok(new ApiResponse("User with id " + user.getId() + " updated successfully! ", userDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -61,7 +59,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long userId){
         try {
              userService.deleteUser(userId);
-            return ResponseEntity.ok(new ApiResponse("User deleted successfully! ",null));
+            return ResponseEntity.ok(new ApiResponse("User with id " + userId + "deleted successfully! ", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
