@@ -3,7 +3,9 @@ package com.FluffyTerror.Joom2.service.user;
 import com.FluffyTerror.Joom2.dto.UserDto;
 import com.FluffyTerror.Joom2.exceptions.AlreadyExistsException;
 import com.FluffyTerror.Joom2.exceptions.ResourceNotFoundException;
+import com.FluffyTerror.Joom2.model.Role;
 import com.FluffyTerror.Joom2.model.User;
+import com.FluffyTerror.Joom2.repository.RoleRepository;
 import com.FluffyTerror.Joom2.repository.UserRepository;
 import com.FluffyTerror.Joom2.request.CreateUserRequest;
 import com.FluffyTerror.Joom2.request.UpdateUserRequest;
@@ -14,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -22,6 +25,7 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Override
     public User getUserById(Long userId) {
@@ -36,11 +40,18 @@ public class UserService implements IUserService {
                 .map(req -> {
                     User user = new User();
                     user.setEmail(request.getEmail());
-                    user.setPassword(passwordEncoder.encode(request.getPassword()));//шифруем пароль перед отправкой в бд
+                    user.setPassword(passwordEncoder.encode(request.getPassword())); // Хешируем пароль
                     user.setFirstName(request.getFirstName());
                     user.setLastName(request.getLastName());
+
+                    // Назначаем дефолтную роль ROLE_USER
+                    Role userRole = roleRepository.findByName("ROLE_USER")
+                            .orElseThrow(() -> new RuntimeException("Default role not found!"));
+
+                    user.setRoles(Collections.singleton(userRole)); // Устанавливаем роль
+
                     return userRepository.save(user);
-                }).orElseThrow(() -> new AlreadyExistsException("User with email: " +request.getEmail() + " already exists"));
+                }).orElseThrow(() -> new AlreadyExistsException("User with email: " + request.getEmail() + " already exists"));
     }
 
     @Override
